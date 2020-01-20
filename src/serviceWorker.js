@@ -52,7 +52,7 @@ export function register(config) {
       }
     });
 
-    self.addEventListener('fetch', function (event) { });
+    window.addEventListener('fetch', function (event) { });
 
   }
 }
