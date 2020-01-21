@@ -23,6 +23,81 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
   <title>React App</title>
+  <style>
+    #snack {
+      visibility: hidden;
+      height: auto;
+      width: 80%;
+      background: #fff;
+      color: black;
+      bottom: 20px;
+      left: 0;
+      padding: 10px;
+      right: 0;
+      border-radius: 6px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      position: fixed;
+      text-align: center;
+      cursor: pointer;
+      margin: 0 auto;
+      font-family: inherit;
+    }
+
+    #snack.show {
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @-webkit-keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @-webkit-keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -38,35 +113,47 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+  <div id="snack">
+    <div>Add to homeScreen</div>
+  </div>
 </body>
-
 <script>
+
+  const showSnack = () => {
+    var x = document.getElementById("snack");
+    x.className = "show";
+    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+  }
+
   if ('serviceWorker' in navigator) {
     console.log("Will the service worker register?");
     navigator.serviceWorker.register('service-worker.js')
       .then(function (reg) {
         console.log("Yes, it did.");
+        showSnack();
       }).catch(function (err) {
         console.log("No it didn't. This happened:", err)
       });
   }
 
   let deferredPrompt;
+  const snack = document.getElementById('snack');
 
   window.addEventListener('beforeinstallprompt', (e) => {
     // Prevent Chrome 67 and earlier from automatically showing the prompt
-    // e.preventDefault();
-    e.prompt();
+    e.preventDefault();
     // Stash the event so it can be triggered later.
     deferredPrompt = e;
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the A2HS prompt');
-      } else {
-        console.log('User dismissed the A2HS prompt');
-      }
-      deferredPrompt = null;
+    snack.addEventListener("click", (e) => {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the A2HS prompt');
+        } else {
+          console.log('User dismissed the A2HS prompt');
+        }
+        deferredPrompt = null;
+      });
     });
   });
 </script>
