@@ -120,7 +120,7 @@
 <script>
 
   const showSnack = () => {
-    var x = document.getElementById("snack");
+    const x = document.getElementById("snack");
     x.className = "show";
     setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
   }
@@ -148,6 +148,8 @@
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
+          const x = document.getElementById("snack");
+          x.className = x.className.replace("show", "");
           console.log('User accepted the A2HS prompt');
         } else {
           console.log('User dismissed the A2HS prompt');
